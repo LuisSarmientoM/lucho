@@ -1,0 +1,33 @@
+{
+  "lastChangelogVersion": "0.84.1",
+  "defaultProvider": "openai-codex",
+  "defaultModel": "gpt-5.6-sol",
+  "defaultThinkingLevel": "medium",
+  "quietStartup": true,
+  "collapseChangelog": true,
+  "enableInstallTelemetry": false,
+  "compaction": {
+    "keepRecentTokens": 12000
+  },
+  "httpIdleTimeoutMs": 60000,
+  "enableSkillCommands": false,
+  "editorPaddingX": 1,
+  "treeFilterMode": "default",
+  "warnings": {
+    "anthropicExtraUsage": false
+  },
+  "packages": [
+    "npm:gentle-engram@0.1.8",
+    "npm:pi-mcp-adapter",
+    "npm:@vndv/pi-codegraph@0.1.10",
+    "npm:pi-subagents",
+    "npm:pi-web-access",
+    "npm:pi-lens",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "git:github.com/DietrichGebert/ponytail@v4.9.0"
+  ],
+  "theme": "dark",
+  "subagents": {
+    "disableBuiltins": true
+  }
+}
