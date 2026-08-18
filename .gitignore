@@ -1,1 +1,7 @@
 session
+node_modules/
+.DS_Store
+.codegraph/
+
+# Local Pi runtime state
+.atl/
