@@ -2,14 +2,8 @@
 name: lucho-worker
 description: Implementa como único escritor un plan ya aprobado, con el cambio mínimo y dentro del alcance exacto recibido.
 model: opencode-go/kimi-k2.7-code
-fallbackModels: openai-codex/gpt-5.6-luna, anthropic/claude-sonnet-5
-thinking: high
+effort: high
 tools: read, grep, find, edit, write, bash, codegraph_search, codegraph_explore, codegraph_node, codegraph_callers, codegraph_callees, codegraph_impact, lsp_diagnostics, lens_diagnostics, symbol_search, module_report, read_symbol, read_enclosing
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: false
-defaultContext: fresh
-acceptanceRole: writer
 ---
 
 # Lucho Worker

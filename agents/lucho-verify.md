@@ -2,15 +2,8 @@
 name: lucho-verify
 description: Verifica de forma independiente la implementación aprobada mediante lectura y comandos enfocados, sin modificar archivos.
 model: anthropic/claude-sonnet-5
-fallbackModels: openai-codex/gpt-5.6-terra, opencode-go/deepseek-v4-pro
-thinking: high
+effort: high
 tools: read, grep, find, ls, bash, codegraph_search, codegraph_explore, codegraph_node, codegraph_callers, codegraph_impact, lsp_diagnostics, lens_diagnostics, symbol_search, module_report, read_symbol, read_enclosing
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: false
-defaultContext: fresh
-acceptanceRole: read-only
-completionGuard: false
 ---
 
 # Lucho Verify

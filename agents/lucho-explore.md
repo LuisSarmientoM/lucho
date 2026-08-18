@@ -2,14 +2,8 @@
 name: lucho-explore
 description: Investiga en modo read-only el código y las restricciones necesarias para que el agente padre pueda decidir y planificar.
 model: opencode-go/qwen3.7-plus
-fallbackModels: anthropic/claude-sonnet-5, openai-codex/gpt-5.6-terra
-thinking: high
+effort: high
 tools: read, grep, find, ls, codegraph_search, codegraph_explore, codegraph_node, codegraph_callers, codegraph_callees, codegraph_impact, codegraph_files
-systemPromptMode: replace
-inheritProjectContext: true
-inheritSkills: false
-defaultContext: fresh
-acceptanceRole: read-only
 ---
 
 # Lucho Explore

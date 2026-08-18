@@ -23,60 +23,65 @@ type MessageEndEvent = {
 	message: { role: string; stopReason?: string; errorMessage?: string };
 };
 
-export const MODELS: Candidate[] = [
-	{ provider: "anthropic", id: "claude-opus-5" },
-	{ provider: "anthropic", id: "claude-sonnet-5" },
-	{ provider: "openai-codex", id: "gpt-5.6-sol" },
-	{ provider: "openai-codex", id: "gpt-5.6-luna", thinking: "max" },
-	{ provider: "opencode-go", id: "kimi-k3" },
-	{ provider: "opencode-go", id: "grok-4.5" },
-	{ provider: "opencode-go", id: "deepseek-v4-pro" },
-];
+const GPT_SOL: Candidate = { provider: "openai-codex", id: "gpt-5.6-sol" };
+const GPT_LUNA: Candidate = {
+	provider: "openai-codex",
+	id: "gpt-5.6-luna",
+	thinking: "max",
+};
+const KIMI: Candidate = { provider: "opencode-go", id: "kimi-k3" };
+const GROK: Candidate = { provider: "opencode-go", id: "grok-4.5" };
+const DEEPSEEK: Candidate = {
+	provider: "opencode-go",
+	id: "deepseek-v4-pro",
+};
 
-const ROUTES: Array<{ index: number; pattern: RegExp }> = [
+export const MODELS: Candidate[] = [GPT_SOL, GPT_LUNA, KIMI, GROK, DEEPSEEK];
+
+const ROUTES: Array<{ candidate: Candidate; pattern: RegExp }> = [
 	{
-		index: 4,
+		candidate: KIMI,
 		pattern:
 			/\b(audit|codebase|contexto largo|large (repo|codebase)|whole repo|repositorio completo|explora(?:r)? todo)\b/i,
 	},
 	{
-		index: 5,
+		candidate: GROK,
 		pattern:
 			/\b(actualidad|current events?|investiga(?:r|ción)? web|noticias|research web|social media|web research)\b/i,
 	},
 	{
-		index: 6,
+		candidate: DEEPSEEK,
 		pattern:
 			/\b(rápido|rapido|simple|sencillo|quick|small change|cambio pequeño|boilerplate)\b/i,
 	},
 	{
-		index: 3,
+		candidate: GPT_LUNA,
 		pattern:
 			/\b(algoritmo|algorithm|matemátic(?:a|o|as|os)|mathematic|proof|demostración|optimiza(?:r|ción)?|performance|rendimiento|concurrencia|concurrency)\b/i,
 	},
 	{
-		index: 0,
+		candidate: GPT_LUNA,
 		pattern:
 			/\b(arquitectura|architecture|seguridad|security|threat model|migración|migration|distributed|distribuido|root cause|causa raíz|debug complejo|complex debug)\b/i,
 	},
 	{
-		index: 2,
+		candidate: GPT_SOL,
 		pattern:
 			/\b(implementa(?:r|ción)?|implementation|refactor|corrige|fix|bug|test|prueba|compile|compila|api|endpoint|typescript|javascript|python|golang|\bgo\b|rust)\b/i,
 	},
 ];
 
-const FALLBACK_ERROR =
-	/\b(401|403|408|429|5\d\d|auth(?:entication|orization)?|unauthorized|forbidden|login|rate.?limit|quota|usage limit|credit|capacity|overload|service unavailable|temporarily unavailable|timeout|timed out|network|fetch failed|connection|econn\w*|socket|gateway|internal server error)\b/i;
 const NO_FALLBACK_ERROR =
-	/\b(abort|cancel|context.?length|context window|too many tokens|prompt too long)\b/i;
+	/\b(abort(?:ed|ing)?|cancel(?:led|ed|ling|ing|ation)?|context.?(?:length|window|overflow)|too many tokens|prompt too long)\b/i;
 
 export function selectStartIndex(prompt: string): number {
-	return ROUTES.find(({ pattern }) => pattern.test(prompt))?.index ?? 1;
+	const candidate =
+		ROUTES.find(({ pattern }) => pattern.test(prompt))?.candidate ?? GPT_SOL;
+	return MODELS.indexOf(candidate);
 }
 
 export function shouldFallback(error: string): boolean {
-	return !NO_FALLBACK_ERROR.test(error) && FALLBACK_ERROR.test(error);
+	return !NO_FALLBACK_ERROR.test(error);
 }
 
 function rotateFrom(index: number): Candidate[] {
@@ -100,7 +105,7 @@ export default function modelRouter(pi: ExtensionAPI) {
 	pi.registerFlag("model-router", {
 		description: "Route tasks across configured subscription models",
 		type: "boolean",
-		default: false,
+		default: true,
 	});
 
 	async function activateNext(
