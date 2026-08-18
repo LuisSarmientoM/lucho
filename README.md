@@ -2,6 +2,9 @@
 
 Configuración local de Pi para trabajar con una conversación pragmática y una orquestación adaptativa, sin un workflow SDD rígido ni comandos obligatorios.
 
+<img width="1280" height="640" alt="lucho-cover" src="https://github.com/user-attachments/assets/68da819a-6dc2-468c-943c-cd16337411af" />
+
+
 ## Comportamiento
 
 - Las tareas pequeñas y claras se resuelven directamente.
