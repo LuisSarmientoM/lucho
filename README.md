@@ -18,10 +18,20 @@ El agente padre mantiene el contexto, decide cuánto explorar, sintetiza el plan
 - `lucho-explore`: investigación read-only para reducir incertidumbre.
 - `lucho-worker`: único escritor de la implementación aprobada.
 - `lucho-verify`: verificación independiente mediante lectura y comandos enfocados.
+- `lucho-security` (opt-in): revisor de seguridad read-only, activado solo por solicitud explícita del padre. No es una fase automática, no delega y no aplica parches.
 
-Los subagentes no delegan. No hay fases fijas: el recorrido normal es explorar solo si aporta valor, acordar un plan, implementar con un escritor y verificar con un agente independiente.
+Los subagentes no delegan. No hay fases fijas: el recorrido normal es explorar solo si aporta valor, acordar un plan, implementar con un escritor y verificar con un agente independiente. La revisión de seguridad entra solo cuando el padre la solicita.
 
-`extensions/model-router.ts` conserva el enrutamiento y fallback de modelos. `sync-to-pi.sh` copia `APPEND_SYSTEM.md`, `settings.json`, `agents/*.md` y `extensions/*.ts` al runtime configurado; no elimina archivos obsoletos del destino.
+`extensions/model-router.ts` conserva el enrutamiento y fallback de modelos. `sync-to-pi.sh` copia `APPEND_SYSTEM.md`, `settings.json`, `agents/*.md`, `extensions/*.ts` y `references/` al runtime configurado; no elimina archivos obsoletos del destino.
+
+## Referencias privadas
+
+Los documentos bajo `references/security/` son referencias internas cargadas bajo demanda por `lucho-security`; no son skills ni se invocan con comandos:
+
+- `references/security/wordpress.md`: WordPress PHP/plugins/themes.
+- `references/security/node-backend.md`: Node/TypeScript servidor.
+- `references/security/browser-frontend.md`: navegador / frontend.
+- `references/security/supply-chain-ci.md`: manifests, lockfiles, workflows, Docker, IaC.
 
 ## Activación
 

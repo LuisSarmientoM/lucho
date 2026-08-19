@@ -35,4 +35,13 @@ for source in "$SOURCE_DIR"/extensions/*.ts; do
 	sync_file "$source" "$PI_AGENT_DIR/extensions/$(basename "$source")"
 done
 
+if [ -d "$SOURCE_DIR/references" ]; then
+	find "$SOURCE_DIR/references" -type f | while IFS= read -r source; do
+		rel_path=${source#"$SOURCE_DIR/references/"}
+		destination="$PI_AGENT_DIR/references/$rel_path"
+		mkdir -p "$(dirname "$destination")"
+		sync_file "$source" "$destination"
+	done
+fi
+
 printf '\nSync complete. Run /reload in Pi to activate the changes.\n'
