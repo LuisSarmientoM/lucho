@@ -102,10 +102,10 @@ export default function modelRouter(pi: ExtensionAPI) {
 	let continuationPending = false;
 	let activeCandidate: Candidate | undefined;
 
-	pi.registerFlag("model-router", {
-		description: "Route tasks across configured subscription models",
+	pi.registerFlag("no-model-router", {
+		description: "Disable automatic model routing and use the user-selected model",
 		type: "boolean",
-		default: true,
+		default: false,
 	});
 
 	async function activateNext(
@@ -133,7 +133,7 @@ export default function modelRouter(pi: ExtensionAPI) {
 	}
 
 	pi.on("session_start", (_event: unknown, ctx: ExtensionContext) => {
-		enabled = pi.getFlag("model-router") === true;
+		enabled = pi.getFlag("no-model-router") !== true;
 		baseThinking = pi.getThinkingLevel();
 		if (enabled) ctx.ui.setStatus("model-router", "router:ready");
 	});
