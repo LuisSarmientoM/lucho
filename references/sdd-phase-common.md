@@ -2,6 +2,10 @@
 
 Protocolo idéntico inyectado en todos los agentes de la pipeline SDD de Lucho.
 
+## Read-only vs memoria
+
+El límite read-only de una fase cubre SOLO archivos y código: no editar, no escribir ficheros, no ejecutar comandos de escritura. Persistir tu artifact en Engram con `mem_save` NO viola ese límite: es tu salida obligatoria de fase, no una modificación del repositorio. Si dudas entre «devolver inline» y «guardar», guarda.
+
 ## Boundary del executor
 
 Cada agente de fase es un EXECUTOR, no un orquestador. Haz tú el trabajo de tu fase. No lances subagentes, no uses `delegate`/`task`, y no rebotes trabajo salvo que tu instrucción de fase te diga explícitamente parar y reportar un bloqueo.
@@ -19,7 +23,7 @@ mem_get_observation(id) → contenido completo (OBLIGATORIO)
 
 ## Persistencia de artifacts
 
-Cada fase que produce un artifact DEBE persistirlo antes de responder. Omitirlo rompe la pipeline.
+Cada fase que produce un artifact DEBE persistirlo antes de responder. Omitirlo rompe la pipeline. Si `mem_save` falla (Engram caído o schema), reintenta una vez antes de degradar a inline.
 
 ```text
 mem_save(
@@ -32,8 +36,8 @@ mem_save(
 )
 ```
 
-`topic_key` habilita upserts (volver a guardar actualiza, no duplica).
-`capture_prompt: false` es obligatorio: son salidas automatizadas de pipeline, no memoria humana. Si el schema de Engram rechaza el campo, omítelo antes que fallar.
+- `topic_key` es SOLO un parámetro de `mem_save` (habilita upserts: volver a guardar actualiza, no duplica). Nunca lo escribas como sección dentro del markdown del artifact.
+- `capture_prompt: false` es obligatorio: son salidas automatizadas de pipeline, no memoria humana. Si el schema de Engram rechaza el campo, omítelo antes que fallar.
 
 ## Envelope de retorno
 
